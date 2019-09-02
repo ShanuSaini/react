@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
 
+import Movies from "./components/movies";
+
 function App() {
   return (
-    <main className="container">
-      <h1>Bootstrap Template</h1>
+    <main className="container pt-5">
+      <Movies />
     </main>
   );
 }
