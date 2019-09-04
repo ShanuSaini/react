@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getMovies, deleteMovie  } from '../services/fakeMovieService';
+import Like from './common/like'
 
 class Movies extends Component {
     state = {
@@ -20,6 +21,16 @@ class Movies extends Component {
         this.setState({movies}); /* movies: movies (Key and value is the same hence only movies is writen) */
     }
 
+    handleLike = (movie) => {
+        const movies = [...this.state.movies];
+        const index = movies.indexOf(movie);
+        movies[index] = {...movies[index]};
+        movies[index].liked = !movies[index].liked;
+        this.setState({
+            movies: movies    
+        });
+    }
+
     getRows() {
         return this.state.movies.map( 
             movie => {
@@ -29,6 +40,9 @@ class Movies extends Component {
                         <td>{movie['genre']['name']}</td>
                         <td>{movie['numberInStock']}</td>
                         <td>{movie['dailyRentalRate']}</td>
+                        <td>
+                            <Like liked={movie['liked']} onClick={ () => this.handleLike(movie) }/>
+                        </td>
                         <td>
                             <button onClick={ () => this.deleteMovieFun(movie)} type="button" className="btn btn-danger">
                                 Delete
@@ -58,6 +72,7 @@ class Movies extends Component {
                                 <th scope="col">Genre</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Rate</th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
