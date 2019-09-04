@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Counters from './components/counters';
 import Navbar from './components/navbar';
@@ -12,6 +11,16 @@ class App extends Component {
       {id: 3, value: 0 },
       {id: 4, value: 0 }
     ]
+  }
+
+  constructor(){  // Add props as parameter if want to access in constructor
+    super();  // Add props as parameter if want to access in constructor
+    console.log('App - Constructor');
+  }
+
+  componentDidMount(){  // After component rendered in DOM
+    // Example Ajax Call etc.
+    console.log('App - Mounted');
   }
 
   handleDelete = (counterId) => {
@@ -42,6 +51,8 @@ class App extends Component {
   }
 
   render() {
+    console.log('App - Rendered');
+
     return(
       <React.Fragment>
         <Navbar totalCounters={this.state.Counters.filter(c => c.value > 0).length}/>
