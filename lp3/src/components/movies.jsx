@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { getMovies, deleteMovie  } from '../services/fakeMovieService';
 import Like from './common/like'
+import Pagination from './common/pagination'
 
 class Movies extends Component {
     state = {
-        movies: getMovies()
+        movies: getMovies(),
+        pageSize: 4
     }
 
     constructor(){
         super();
-        this.setState({
-            movies: getMovies()
-        });
         this.getRows = this.getRows.bind(this);
         this.deleteMovieFun = this.deleteMovieFun.bind(this);
     }
@@ -29,6 +28,10 @@ class Movies extends Component {
         this.setState({
             movies: movies    
         });
+    }
+
+    handlePageChange = (page) => {
+        console.log('handlePageChange');
     }
 
     getRows() {
@@ -57,7 +60,6 @@ class Movies extends Component {
     render(){
         const moviesLength = this.state.movies.length;
 
-
         if(moviesLength === 0)
             return <p>There are no movies in the Database.</p>
         
@@ -80,6 +82,11 @@ class Movies extends Component {
                             { this.getRows() }
                         </tbody>
                     </table>
+                    <Pagination 
+                        itemsCount={moviesLength} 
+                        pageSize={this.state.pageSize} 
+                        onPageChange={this.handlePageChange} 
+                    />
                 </div>
             </React.Fragment>
         );
