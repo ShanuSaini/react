@@ -23,8 +23,12 @@
   color: #61dafb;
 }
 
-.cp{
+.cp, .page-link{
   cursor: pointer;
+}
+
+.page-item.active{
+  color: #fff;
 }
 
 @keyframes App-logo-spin {
