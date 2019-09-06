@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
-import { getMovies, deleteMovie  } from '../services/fakeMovieService';
+import { getMovies  } from '../services/fakeMovieService';
+import { getGenres } from '../services/fakeGenreService.js';
 import Like from './common/like';
 import Pagination from './common/pagination';
 import { paginate } from '../utills/paginate';
+import ListGroup from './common/listGroup';
 
 class Movies extends Component {
     state = {
-        movies: getMovies(),
+        movies: [],
+        genres: [],
         currentPage: 1,
-        pageSize: 4
+        pageSize: 4,
+    };
+
+    componentDidMount(){
+        this.setState({
+            movies: getMovies(),
+            genres: getGenres(),
+        });
     }
 
     constructor(){
@@ -60,6 +70,13 @@ class Movies extends Component {
         );
     }
 
+    handleGenreSelect = genre => {
+        // console.log('handleGenreSelect = ', genre);
+        this.setState({
+            selectedGenre: genre
+        });
+    }
+
     render(){
         const moviesLength = this.state.movies.length;
         const { pageSize, currentPage } = this.state;
@@ -70,32 +87,41 @@ class Movies extends Component {
         const movies = paginate(this.state.movies, currentPage, pageSize);
 
         return (
-            <React.Fragment>
-                <p>Showing {moviesLength} movies in the database.</p>
-                <div className="container">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Title</th>
-                                <th scope="col">Genre</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Rate</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { this.getRows(movies) }
-                        </tbody>
-                    </table>
-                    <Pagination 
-                        itemsCount={moviesLength} 
-                        pageSize={pageSize} 
-                        currentPage={currentPage}
-                        onPageChange={this.handlePageChange} 
+            <div className="row">
+                <div className="col-3">
+                    <ListGroup // Default Props = textProperty: 'name', valueProperty: '_id'
+                        items={this.state.genres} 
+                        selectedItem={this.state.selectedGenre}
+                        onItemSelect={this.handleGenreSelect}
                     />
                 </div>
-            </React.Fragment>
+                <div className="col">
+                    <p>Showing {moviesLength} movies in the database.</p>
+                    <div className="container">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Genre</th>
+                                    <th scope="col">Stock</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                { this.getRows(movies) }
+                            </tbody>
+                        </table>
+                        <Pagination 
+                            itemsCount={moviesLength} 
+                            pageSize={pageSize} 
+                            currentPage={currentPage}
+                            onPageChange={this.handlePageChange} 
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
 }
