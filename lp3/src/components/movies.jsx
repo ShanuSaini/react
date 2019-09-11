@@ -34,6 +34,14 @@ class Movies extends Component {
         this.setState({movies}); /* movies: movies (Key and value is the same hence only movies is writen) */
     }
 
+    getPageData = () => {
+        const { pageSize, currentPage, sortColumn, selectedGenre, movies: allMovies } = this.state;
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+        const movies = paginate(sorted, currentPage, pageSize);
+        return { totalCount: filtered.length, data: movies };
+    }
+
     handleLike = (movie) => {
         const movies = [...this.state.movies];
         const index = movies.indexOf(movie);
@@ -63,16 +71,12 @@ class Movies extends Component {
 
     render(){
         const moviesLength = this.state.movies.length;
-        const { pageSize, currentPage, sortColumn, selectedGenre, movies: allMovies } = this.state;
+        const { pageSize, currentPage, sortColumn } = this.state;
 
         if(moviesLength === 0)
             return <p>There are no movies in the Database.</p>;
 
-        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
-        
-        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
-
-        const movies = paginate(sorted, currentPage, pageSize);
+        const { totalCount, data: movies } = this.getPageData();
 
         return (
             <div className="row">
@@ -84,7 +88,7 @@ class Movies extends Component {
                     />
                 </div>
                 <div className="col">
-                    <p>Showing {filtered.length} movies in the database.</p>
+                    <p>Showing {totalCount} movies in the database.</p>
                     <div className="container">
                         <MoviesTable 
                             movies={movies}
@@ -94,7 +98,7 @@ class Movies extends Component {
                             sortColumn={sortColumn}
                         />
                         <Pagination 
-                            itemsCount={filtered.length} 
+                            itemsCount={totalCount} 
                             pageSize={pageSize} 
                             currentPage={currentPage}
                             onPageChange={this.handlePageChange} 
