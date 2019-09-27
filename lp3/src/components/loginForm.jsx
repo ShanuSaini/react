@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Input from './common/input';
 
 class LoginForm extends Component {
     state = {
@@ -29,32 +30,18 @@ class LoginForm extends Component {
         const { account } = this.state;
         return (
             <form onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    { /* <input ref={this.username} autoFocus type="text" className="form-control" id="username" placeholder="Enter Username" /> */ }
-                    <input 
-                        onChange={this.handleChange}
-                        value={account.username} 
-                        name="username"
-                        autoFocus 
-                        type="text" 
-                        className="form-control" 
-                        id="username" 
-                        placeholder="Enter Username" 
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input 
-                        onChange={this.handleChange}
-                        value={account.password}
-                        name="password"
-                        type="password" 
-                        className="form-control" 
-                        id="password" 
-                        placeholder="Enter Password" 
-                    />
-                </div>
+                <Input 
+                    name="username"
+                    value={account.username}
+                    label="Username"
+                    onChange={this.handleChange}
+                />
+                <Input 
+                    name="password"
+                    value={account.password}
+                    label="Password"
+                    onChange={this.handleChange}
+                />
                 <button type="submit" className="btn btn-primary">Login</button>
             </form>
         );
